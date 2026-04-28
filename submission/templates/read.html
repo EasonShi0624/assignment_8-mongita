@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<main>
+    <section id="catLeft">
+        {% if selectedCategory %}
+            <p class="pageIntro">Showing: {{ selectedCategory['name'] }}</p>
+            <a class="commandButton" href="{{ url_for('read') }}">Show All Books</a>
+        {% else %}
+            <p class="pageIntro">Showing all books</p>
+        {% endif %}
+
+        {% for cat in categories %}
+            {% if selectedCategory and selectedCategory['id'] == cat['id'] %}
+                <p class="selectedCategory">{{ cat['name'] }}</p>
+            {% else %}
+                <p class="notSelectedCategory">
+                    <a href="{{ url_for('read', categoryId=cat['id']) }}">
+                        {{ cat['name'] }}
+                    </a>
+                </p>
+            {% endif %}
+        {% endfor %}
+    </section>
+
+    <section id="catRight">
+        {% if not books %}
+            <p id="notFoundMessage">No books found.</p>
+        {% endif %}
+
+        {% for book in books %}
+        <div class="book">
+            <div>
+                <img
+                    src="{{ url_for('static', filename='images/books/' + book['image']) }}"
+                    alt="{{ book['title'] }}"
+                >
+            </div>
+
+            <div class="bookDetailBox">
+                <p class="bookTitle">{{ book['title'] }}</p>
+                <p class="bookDetail">by {{ book['author'] }}</p>
+                <p class="bookDetail">ISBN: {{ book['isbn'] }}</p>
+                <p class="bookDetail">Category: {{ book['categoryName'] }}</p>
+                <p class="bookPrice">${{ '%.2f'|format(book['price']) }}</p>
+                <p class="bookDetail">Read Now: {{ book['readNow'] }}</p>
+
+                <div class="actionLinkRow">
+                    <a class="actionButton" href="{{ url_for('edit', book_id=book['id']) }}">Edit</a>
+                    <a
+                        class="actionButton deleteButton"
+                        href="{{ url_for('delete', book_id=book['id']) }}"
+                        onclick="return confirm('Delete {{ book['title'] }}?');"
+                    >
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

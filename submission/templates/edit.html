@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<main class="simplePage">
+    <div class="formCard">
+        <h2>Edit Book</h2>
+
+        {% if error %}
+            <p id="notFoundMessage">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('edit_post', book_id=book['id']) }}">
+            <label>Title:</label><br>
+            <input class="formField" type="text" name="title" value="{{ book.get('title', '') }}" required><br><br>
+
+            <label>Author:</label><br>
+            <input class="formField" type="text" name="author" value="{{ book.get('author', '') }}" required><br><br>
+
+            <label>ISBN:</label><br>
+            <input class="formField" type="text" name="isbn" value="{{ book.get('isbn', '') }}" required><br><br>
+
+            <label>Price:</label><br>
+            <input class="formField" type="number" step="0.01" name="price" value="{{ book.get('price', '') }}" required><br><br>
+
+            <label>Image filename:</label><br>
+            <input class="formField" type="text" name="image" value="{{ book.get('image', '') }}" required><br><br>
+
+            <label>Category:</label><br>
+            <select class="formField" name="categoryId" required>
+                {% for cat in categories %}
+                    <option value="{{ cat['id'] }}" {% if book.get('categoryId')|string == cat['id']|string %}selected{% endif %}>
+                        {{ cat['name'] }}
+                    </option>
+                {% endfor %}
+            </select><br><br>
+
+            <label>Read Now (0 or 1):</label><br>
+            <select class="formField" name="readNow" required>
+                <option value="0" {% if book.get('readNow')|string == '0' %}selected{% endif %}>0</option>
+                <option value="1" {% if book.get('readNow')|string == '1' %}selected{% endif %}>1</option>
+            </select><br><br>
+
+            <div class="formActionRow">
+                <button class="submitButton" type="submit">Save</button>
+                <a class="commandButton cancelButton" href="{{ url_for('read') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

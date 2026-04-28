@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block container %}
+<main>
+    <div id="mainLeft">
+        <h1 class="welcomeText">
+            Welcome to the single source for all your music book maintenance needs!
+        </h1>
+
+        <p class="welcomeText">
+            This version of Treble Clef stores bookstore data locally in a Mongita database.
+        </p>
+        <p class="welcomeText">
+            Use this website to view all books, add new books, edit existing records, and delete titles when needed.
+        </p>
+        <p class="welcomeText">
+            The homepage still loads category links from the database so the site remains connected end-to-end.
+        </p>
+
+        <a class="commandButton" href="{{ url_for('read') }}">Open the Book List</a>
+    </div>
+
+    <div id="mainRight">
+        <h1>Shop by category:</h1>
+        <div id="categorySelections">
+            {% for category in categories %}
+            <div class="category">
+                <p>
+                    <a href="{{ url_for('read', categoryId=category['id']) }}">
+                        {{ category['name'] }}
+                    </a>
+                </p>
+
+                <a href="{{ url_for('read', categoryId=category['id']) }}">
+                    <img
+                        src="{{ url_for('static', filename='images/categories/' + category['name']|lower|replace(' ', '-') + '-category.jpg') }}"
+                        alt="{{ category['name'] }}"
+                    >
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}
